@@ -13,9 +13,9 @@ public class Driver {
     private String driverID;
     private String name;
     private int experienceYears;
-    private String licenseType; // Expected values: Light, Medium, Heavy, Public Transport
-    private String address; // Formatted as: Street Number | Street Name | City | State | Country
-    private String birthdate; // Formatted as: DD-MM-YYYY
+    private String licenseType;
+    private String address;
+    private String birthdate;
 
     /**
      * Constructs a new Driver instance with the specified core details.
