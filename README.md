@@ -163,9 +163,7 @@ Workflow file:
 ```
 
 ---
-
 ## Authors
-
 - Jan Haji
 - Pranav Ramesh
 - Shimar Yasin Khan

@@ -5,23 +5,27 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+// Unit tests for the Driver class covering conditions D1 through D5.
+// Each condition has at least three test cases: normal, invalid, and edge.
+
 public class DriverTest {
 
- 
-   // D1 - Normal case.
+    // D1 - Driver ID Rules
+    // driverID must be exactly 10 chars, first 2 digits 2-9,
+    // at least 2 special chars in positions 2-7, last 2 uppercase A-Z.
+
+    // D1 - Normal case: all four ID rules are satisfied, driver should be accepted.
     @Test
     void D1_ValidDriverID() {
-
         // "23ab#$cdXY" -> first two digits are 2 and 3 (both in 2-9),
         // middle "ab#$cd" contains '#' and '$' (2 specials), last two "XY" uppercase
-        
         Driver driver = new Driver("23ab#$cdXY", "Alice Brown", 5,
                 "Heavy", "1|Main St|Melbourne|VIC|Australia", "01-01-1990");
 
         assertTrue(driver.isValidDriverID());
     }
 
-    // D1 - Invalid input
+    // D1 - Invalid input: ID is only 8 characters, length check must reject it.
     @Test
     void D1_DriverIDTooShort() {
         // "23#$abXY" is 8 characters - fails the length check
@@ -31,7 +35,7 @@ public class DriverTest {
         assertFalse(driver.isValidDriverID());
     }
 
-    // D1 - Invalid input
+    // D1 - Invalid input: first digit is '1', which is outside the allowed 2-9 range.
     @Test
     void D1_DriverIDFirstDigitOutOfRange() {
         // "13ab#$cdXY" -> first char '1' is outside the 2-9 range
@@ -41,8 +45,7 @@ public class DriverTest {
         assertFalse(driver.isValidDriverID());
     }
 
-
-    // D1 - Invalid input
+    // D1 - Invalid input: middle section has no special characters, minimum of 2 not met.
     @Test
     void D1_DriverIDNoSpecialCharsInMiddle() {
         // "23abcdcdXY" -> middle "abcdcd" contains zero special characters
@@ -52,7 +55,7 @@ public class DriverTest {
         assertFalse(driver.isValidDriverID());
     }
 
-    // D1 - Edge case.
+    // D1 - Edge case: exactly 2 special characters in the middle, the minimum boundary, should pass.
     @Test
     void D1_DriverIDExactlyTwoSpecialCharsInMiddle() {
         // "23@#abcdXY" -> middle "@#abcd" has exactly '@' and '#' (2 specials)
@@ -62,7 +65,10 @@ public class DriverTest {
         assertTrue(driver.isValidDriverID());
     }
 
-    // D2 - Normal case.
+    // D2 - Address Format
+    // Address must follow: Street Number|Street Name|City|State|Country (5 non-blank segments).
+
+    // D2 - Normal case: address has all 5 pipe-separated segments, should be accepted.
     @Test
     void D2_ValidAddress() {
         Driver driver = new Driver("23ab#$cdXY", "Frank Hill", 5,
@@ -71,7 +77,7 @@ public class DriverTest {
         assertTrue(driver.isValidAddress());
     }
 
-    // D2 - Invalid Input 
+    // D2 - Invalid input: address uses spaces instead of pipes, split yields 1 part not 5.
     @Test
     void D2_AddressWithSpaceDelimitersRejected() {
         // No '|' separator - split produces only 1 part
@@ -81,9 +87,7 @@ public class DriverTest {
         assertFalse(driver.isValidAddress());
     }
 
-    
-    // D2 - Edge case.
- 
+    // D2 - Edge case: address has only 4 segments, one short of the required 5.
     @Test
     void D2_AddressMissingFifthSegmentRejected() {
         // Only 4 segments: Street Number|Street Name|City|State (no Country)
@@ -94,9 +98,9 @@ public class DriverTest {
     }
 
     // D3 - Birthdate Format
+    // Birthdate must be a real calendar date in DD-MM-YYYY format.
 
-    //  * D3 - Normal case.
-
+    // D3 - Normal case: birthdate in correct DD-MM-YYYY format, should be accepted.
     @Test
     void D3_ValidBirthdate() {
         Driver driver = new Driver("23ab#$cdXY", "Isla Reed", 5,
@@ -105,7 +109,7 @@ public class DriverTest {
         assertTrue(driver.isValidBirthdate());
     }
 
-    // D3 - Invalid input.
+    // D3 - Invalid input: date is in YYYY-MM-DD format, which the parser must reject.
     @Test
     void D3_BirthdateInWrongFormatRejected() {
         // ISO format YYYY-MM-DD is not accepted
@@ -115,7 +119,7 @@ public class DriverTest {
         assertFalse(driver.isValidBirthdate());
     }
 
-    //D3 - Edge case.
+    // D3 - Edge case: 29-02-2000 is a valid leap year date and should be accepted.
     @Test
     void D3_LeapYearBirthdateAccepted() {
         Driver driver = new Driver("23ab#$cdXY", "Karen Lane", 5,
@@ -125,8 +129,9 @@ public class DriverTest {
     }
 
     // D4 - License Update Restriction
-    
-    // D4 - Normal case
+    // Drivers with more than 10 years of experience cannot change their license type.
+
+    // D4 - Normal case: driver has 5 years experience, license change should be allowed.
     @Test
     void D4_DriverUnder10YearsCanChangeLicense() {
         Driver original = new Driver("23ab#$cdXY", "Leo Fox", 5,
@@ -139,8 +144,7 @@ public class DriverTest {
         assertTrue(original.canUpdate(updated));
     }
 
-    //D4 - Invalid input.
-
+    // D4 - Invalid input: driver has 11 years experience, license change must be blocked.
     @Test
     void D4_DriverOver10YearsCannotChangeLicense() {
         Driver original = new Driver("23ab#$cdXY", "Mia Cross", 11,
@@ -153,8 +157,7 @@ public class DriverTest {
         assertFalse(original.canUpdate(updated));
     }
 
-    //D4 - Edge case.
-
+    // D4 - Edge case: exactly 10 years sits on the boundary, restriction is >10 so change must be allowed.
     @Test
     void D4_DriverWithExactly10YearsCanChangeLicense() {
         Driver original = new Driver("23ab#$cdXY", "Noah King", 10,
@@ -167,10 +170,10 @@ public class DriverTest {
         assertTrue(original.canUpdate(updated));
     }
 
-
     // D5 - Immutable Fields
- 
-    // D5 - Normal Case 
+    // driverID and name cannot be modified during an update operation.
+
+    // D5 - Normal case: only mutable fields change, driverID and name stay the same, update should pass.
     @Test
     void D5_UpdateMutableFieldsIsAllowed() {
         Driver original = new Driver("23ab#$cdXY", "Olivia Hart", 5,
@@ -183,7 +186,7 @@ public class DriverTest {
         assertTrue(original.canUpdate(updated));
     }
 
-    // D5 - Invalid input.
+    // D5 - Invalid input: driverID is different in the update object, must be rejected.
     @Test
     void D5_CannotChangeDriverID() {
         Driver original = new Driver("23ab#$cdXY", "Paul Nash", 5,
@@ -196,7 +199,7 @@ public class DriverTest {
         assertFalse(original.canUpdate(updated));
     }
 
-    //D5 - Invalid input.
+    // D5 - Invalid input: name is different in the update object, must be rejected.
     @Test
     void D5_CannotChangeName() {
         Driver original = new Driver("23ab#$cdXY", "Quinn Blake", 5,
