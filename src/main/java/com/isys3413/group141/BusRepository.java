@@ -151,8 +151,10 @@ public class BusRepository {
    * @return
    */
   private String toRecord(Bus bus) {
-
-    return bus.getBusID() + "," + bus.getCapacity() + "," + bus.getFuelLevel() + "," + bus.getFuelType();
+    return bus.getBusID() + ","
+        + bus.getCapacity() + ","
+        + bus.getFuelLevel() + ","
+        + bus.getFuelType();
   }
 
   /**

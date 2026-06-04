@@ -100,17 +100,18 @@ public class Bus {
      *         false otherwise
      */
     public boolean canBeDrivenBy(Driver driver, int age) {
-        if (fuelType.equals("Electricity") && driver.getExperienceYears() < 5)
-            return false;
-
-        if ((fuelType.equals("Electricity") || fuelType.equals("Hybrid"))
-                && !(driver.getLicenseType().equals("Heavy") ||
-                        driver.getLicenseType().equals("PublicTransport"))) {
+        if (fuelType.equals("Electricity") && driver.getExperienceYears() < 5) {
             return false;
         }
 
-        if (age > 50 && capacity >= 50)
+        if ((fuelType.equals("Electricity") || fuelType.equals("Hybrid"))
+                && !(driver.getLicenseType().equals("Heavy") || driver.getLicenseType().equals("PublicTransport"))) {
             return false;
+        }
+
+        if (age > 50 && capacity >= 50) {
+            return false;
+        }
 
         return true;
     }
