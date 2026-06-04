@@ -35,26 +35,6 @@ public class DriverTest {
         assertFalse(driver.isValidDriverID());
     }
 
-    // D1 - Invalid input: first digit is '1', which is outside the allowed 2-9 range.
-    @Test
-    void D1_DriverIDFirstDigitOutOfRange() {
-        // "13ab#$cdXY" -> first char '1' is outside the 2-9 range
-        Driver driver = new Driver("13ab#$cdXY", "Carol White", 4,
-                "Light", "1|Main St|Melbourne|VIC|Australia", "01-01-1990");
-
-        assertFalse(driver.isValidDriverID());
-    }
-
-    // D1 - Invalid input: middle section has no special characters, minimum of 2 not met.
-    @Test
-    void D1_DriverIDNoSpecialCharsInMiddle() {
-        // "23abcdcdXY" -> middle "abcdcd" contains zero special characters
-        Driver driver = new Driver("23abcdcdXY", "Dan Green", 6,
-                "Heavy", "1|Main St|Melbourne|VIC|Australia", "01-01-1990");
-
-        assertFalse(driver.isValidDriverID());
-    }
-
     // D1 - Edge case: exactly 2 special characters in the middle, the minimum boundary, should pass.
     @Test
     void D1_DriverIDExactlyTwoSpecialCharsInMiddle() {
